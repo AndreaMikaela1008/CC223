@@ -1,0 +1,19 @@
+<script type = "module">
+    import {getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const auth = getAuth();
+
+    function registerUser(email,password){
+        createUserWithEmailAndPassword(auth,email,password).then(
+            userCredential => console.log("User Registered: ", userCredential.user)).catch(
+            error => console.error("Error: ", error.message));
+
+    }
+
+    function loginUser(email,password){
+        signInWithEmailAndPassword(auth, email, password).then(
+            userCredential => console.log("User Logged In: ", userCredential.user)).catch(
+            error => console.error("Error: ", error.message));
+    }
+
+    </script>
