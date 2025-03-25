@@ -1,89 +1,164 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/11.5.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/11.5.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.5.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Auth App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, deleteUser, updateProfile }
+        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDoc, doc }
+        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+ 
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZGZlQ9nPhPGfqKEZNeY-1P_yd-XXWVoM",
+            authDomain: "mywebapp-94fab.firebaseapp.com",
+            projectId: "mywebapp-94fab",
+            storageBucket: "mywebapp-94fab.firebasestorage.app",
+            messagingSenderId: "365906197591",
+            appId: "1:365906197591:web:ff9ea5fe39d09f42a83712",
+            measurementId: "G-8RN75316JR"
+        }; 
+ 
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getFirestore(app);
+ 
+        // Login function
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+           
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+ 
+                // Retrieve user 
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+ 
+                if (docSnap.exists()) {
+                    document.getElementById("welcomeMessage").innerText = `Hi, ${docSnap.data().name}!`;
+                } else {
+                    document.getElementById("welcomeMessage").innerText = `Hi, you're logged in!`;
+                }
+ 
+                document.getElementById("loginScreen").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+ 
+        // Add data
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("registerName").value;
+            const email = document.getElementById("registerEmail").value;
+            const password = document.getElementById("registerPassword").value;
+ 
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+ 
+                // Update 
+                await updateProfile(user, { displayName: name });
+ 
+                // Store user data in Firestore
+                await addDoc(collection(db, "users"), {
+                    uid: user.uid,
+                    name: name,
+                    email: email
+                });
+ 
+                alert("Registration successful! Please log in.");
+                document.getElementById("registerScreen").style.display = "none";
+                document.getElementById("loginScreen").style.display = "block";
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+ 
+        // Logout 
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            signOut(auth).then(() => {
+                document.getElementById("dashboard").style.display = "none";
+                document.getElementById("loginScreen").style.display = "block";
+ 
+                // Clear login input
+                document.getElementById("loginEmail").value = "";
+                document.getElementById("loginPassword").value = "";
+            });
+        });
+ 
+        // Delete 
+        document.getElementById("deleteBtn").addEventListener("click", async () => {
+            const user = auth.currentUser;
+            try {
+                await deleteUser(user);
+                alert("Account deleted successfully.");
+                document.getElementById("dashboard").style.display = "none";
+                document.getElementById("loginScreen").style.display = "block";
+ 
+                // Clear input fields
+                document.getElementById("loginEmail").value = "";
+                document.getElementById("loginPassword").value = "";
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+ 
+        // Back to Register
+        document.getElementById("showRegister").addEventListener("click", () => {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("registerScreen").style.display = "block";
+        });
+ 
+        // Back to Login
+        document.getElementById("showLogin").addEventListener("click", () => {
+            document.getElementById("registerScreen").style.display = "none";
+            document.getElementById("loginScreen").style.display = "block";
+        });
+ 
     </script>
-  </body>
+</head>
+<body>
+ 
+    <!-- Login Screen -->
+    <div id="loginScreen" class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+    </div>
+ 
+    <!-- Register Screen -->
+    <div id="registerScreen" class="container" style="display: none;">
+        <h1>Register</h1>
+        <form id="registerForm">
+            <input type="text" id="registerName" placeholder="Full Name" required>
+            <input type="email" id="registerEmail" placeholder="Email" required>
+            <input type="password" id="registerPassword" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+    </div>
+ 
+    <!-- Dashboard (After Login) -->
+    <div id="dashboard" class="container" style="display: none;">
+        <h1 id="welcomeMessage"></h1>
+        <button id="logoutBtn">Logout</button>
+        <button id="deleteBtn">Delete Account</button>
+    </div>
+ 
+</body>
 </html>
